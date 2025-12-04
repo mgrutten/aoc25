@@ -1,13 +1,10 @@
 
-
-function part1(lines)
+function part1(instructions)
     value = 50
     zero_count = 0
 
     # Iterate over lines
-    for line in lines
-        direction = line[1]
-        rotation = parse(Int, line[2:end])
+    for (direction, rotation) in instructions
 
         # Move to next location
         if direction == 'L'
@@ -32,14 +29,12 @@ function part1(lines)
 end
 
 
-function part2(lines)
+function part2(instructions)
     value = 50
     zero_count = 0
 
     # Iterate over lines
-    for line in lines
-        direction = line[1]
-        rotation = parse(Int, line[2:end])
+    for (direction, rotation) in instructions
 
         # Move to next location
         if direction == 'L'
@@ -64,6 +59,8 @@ end
 
 if abspath(PROGRAM_FILE) == @__FILE__
     lines = readlines("data/day01/part1.txt")
-    part1(lines)
-    part2(lines)
+    instructions = [(line[1], parse(Int, line[2:end])) for line in lines]
+
+    part1(instructions)
+    part2(instructions)
 end
