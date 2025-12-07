@@ -1,3 +1,4 @@
+using Memoize
 
 function print_grid(grid)
     for row in axes(grid, 1)
@@ -36,19 +37,11 @@ end
 
 
 function part2(grid)
-    # History of visited nodes
-    memo = Dict{Tuple{Int,Int},Int}()
 
-    function dfs(row, col)
+    @memoize function dfs(row, col)
         # End of the path
         if row == size(grid, 1)
             return 1
-        end
-
-        # Check memo
-        state = (row, col)
-        if haskey(memo, state)
-            return memo[state]
         end
 
         cell = grid[row, col]
@@ -61,13 +54,11 @@ function part2(grid)
             total_paths += dfs(row, col + 1)
         end
 
-        # Store in memo
-        memo[state] = total_paths
         return total_paths
     end
 
     # Find starting position(s)
-    start_col = findfirst(grid[1,:] .== 'S')
+    start_col = findfirst(grid[1, :] .== 'S')
     result = dfs(2, start_col)
 
     println("Total paths: ", result)
