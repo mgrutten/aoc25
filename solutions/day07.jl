@@ -13,13 +13,12 @@ function part1(grid)
     splits = 0
     for row in axes(beam_grid, 1)[2:end]
         for col in axes(beam_grid, 2)
-            if beam_grid[row, col] == '.'
-                if beam_grid[row-1, col] == 'S'
-                    beam_grid[row, col] = '|'
-                elseif beam_grid[row-1, col] == '|'
-                    beam_grid[row, col] = '|'
-                end
-            elseif beam_grid[row, col] == '^' && beam_grid[row-1, col] == '|'
+            cell = beam_grid[row, col]
+            above = beam_grid[row-1, col]
+
+            if cell == '.' && above in ['S', '|']
+                beam_grid[row, col] = '|'
+            elseif cell == '^' && above == '|'
                 if beam_grid[row, col-1] == '.'
                     beam_grid[row, col-1] = '|'
                 end
@@ -57,7 +56,7 @@ function part2(grid)
         return total_paths
     end
 
-    # Find starting position(s)
+    # Find starting position
     start_col = findfirst(grid[1, :] .== 'S')
     result = dfs(2, start_col)
 
