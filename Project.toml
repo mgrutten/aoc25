@@ -1,2 +1,4 @@
 [deps]
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
