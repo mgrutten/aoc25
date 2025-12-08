@@ -1,5 +1,5 @@
-using Distances
-using DataStructures
+import Distances
+import DataStructures
 
 
 function find_pairs(points)
@@ -10,13 +10,14 @@ function find_pairs(points)
 
     for i in 1:n-1
         for j in i+1:n
-            d = euclidean(view(points, i, :), view(points, j, :))
+            d = Distances.euclidean(view(points, i, :), view(points, j, :))
             push!(pairs, (d, i, j))
         end
     end
 
     return pairs
 end
+
 
 function part1(points, close_count)
 
@@ -25,22 +26,16 @@ function part1(points, close_count)
     pairs = find_pairs(points)
     partialsort!(pairs, 1:close_count, by=first)
 
-    ds = DisjointSets(1:n)
+    ds = DataStructures.IntDisjointSet(n)
     for (_, i, j) in pairs[1:close_count]
-        union!(ds, i, j)
+        DataStructures.union!(ds, i, j)
     end
 
-    cluster_sizes = Dict{Int,Int}()
-    for i in 1:n
-        root = find_root!(ds, i)
-        cluster_sizes[root] = get(cluster_sizes, root, 0) + 1
-    end
+    cluster_sizes = DataStructures.counter(DataStructures.find_root!.(Ref(ds), 1:n))
+    top3 = partialsort(collect(values(cluster_sizes)), 1:3, rev=true)
 
-    sizes = sort(collect(values(cluster_sizes)), rev=true)
-
-    println("Clusters: ", length(sizes))
-    println("3 largest: ", sizes[1:3])
-    println("Result: ", prod(sizes[1:3]))
+    println("3 largest: ", top3)
+    println("Result: ", prod(top3))
 end
 
 
@@ -51,10 +46,10 @@ function part2(points)
     pairs = find_pairs(points)
     sort!(pairs, by=first)
 
-    ds = DisjointSets(1:n)
+    ds = DataStructures.IntDisjointSet(n)
     for (_, i, j) in pairs
-        union!(ds, i, j)
-        if num_groups(ds) == 1
+        DataStructures.union!(ds, i, j)
+        if DataStructures.num_groups(ds) == 1
             println(points[i, :], "/", points[j, :])
             println("Result: ", points[i, 1] * points[j, 1])
             break
