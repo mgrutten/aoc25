@@ -1,8 +1,8 @@
 using Distances
 using DataStructures
 
-function part1(points, close_count)
 
+function find_pairs(points)
     n = size(points, 1)
 
     pairs = Vector{Tuple{Float64,Int,Int}}()
@@ -15,11 +15,18 @@ function part1(points, close_count)
         end
     end
 
+    return pairs
+end
+
+function part1(points, close_count)
+
+    n = size(points, 1)
+
+    pairs = find_pairs(points)
     partialsort!(pairs, 1:close_count, by=first)
-    closest = pairs[1:close_count]
 
     ds = DisjointSets(1:n)
-    for (_, i, j) in closest
+    for (_, i, j) in pairs[1:close_count]
         union!(ds, i, j)
     end
 
@@ -41,16 +48,7 @@ function part2(points)
 
     n = size(points, 1)
 
-    pairs = Vector{Tuple{Float64,Int,Int}}()
-    sizehint!(pairs, div(n * (n - 1), 2))
-
-    for i in 1:n-1
-        for j in i+1:n
-            d = euclidean(view(points, i, :), view(points, j, :))
-            push!(pairs, (d, i, j))
-        end
-    end
-
+    pairs = find_pairs(points)
     sort!(pairs, by=first)
 
     ds = DisjointSets(1:n)
