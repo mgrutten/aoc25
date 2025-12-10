@@ -1,4 +1,32 @@
 
+# using Plots
+# plotly()
+# default(size=(1000, 800))  # Set default size for all plots
+
+
+# function plot_region(points)
+#     # Extract x and y coordinates from matrix
+#     xs = points[:, 1]
+#     ys = points[:, 2]
+
+#     # Close the polygon by adding first point at the end
+#     xs = vcat(xs, xs[1])
+#     ys = vcat(ys, ys[1])
+
+#     # Plot the polygon
+#     plot(xs, ys, 
+#          label="Region boundary",
+#          linewidth=2,
+#          aspect_ratio=:equal,
+#          legend=:topright)
+
+#     # Optionally add the vertices as points
+#     scatter!(xs[1:end-1], ys[1:end-1], 
+#              label="Vertices",
+#              markersize=4)
+# end
+
+
 function calculate_area(i, j, points)
     return (abs(points[i, 1] - points[j, 1]) + 1) * (abs(points[i, 2] - points[j, 2]) + 1)
 end
@@ -68,6 +96,9 @@ end
 
 lines = readlines("data/day09/input.txt")
 points = stack(parse.(Int, split(line, ',')) for line in lines; dims=1)
+
+# plot_region(points)
+# display(plot!())
 
 part1(points)
 part2(points)
